@@ -11,18 +11,8 @@ xueqiuHeader = {"Accept": 'application/json, text/javascript, */*; q=0.01',
                  "User-Agent": 'Mozilla / 5.0(Macintosh;Intel Mac OS X 10_14_1) AppleWebKit / 537.36(KHTML, like Gecko) \
                  Chrome / 71.0.3578.98 Safari/537.36',
                  "X-Requested-With": 'XMLHttpRequest',
-                 "Cookie": '__utmz=1.1521689062.37.2.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; \
-                 _ga=GA1.2.2022971702.1507098243; device_id=7912987cc1acb87793b6a39ac3f56509; s=ep120643by; \
-                 bid=9f1e4b7c1bf25a9ee495aee5366eb4dd_jo1cumta; remember=1; remember.sig=K4F3faYzmVuqC0iXIERCQf55g2Y;\
-                  xq_a_token=81926db31b817fddd4200e5c29b8aacff4e8b430; xq_a_token.sig=Dz7a60cf3N36a-icWVoXCdYJ-vk; \
-                  xqat=81926db31b817fddd4200e5c29b8aacff4e8b430; xqat.sig=2ZVCpx41OSIUXW6Oq9EO86-a-o0; \
-                  xq_r_token=b93cde8ccea91007a225d2cea6433e7659f1da84; xq_r_token.sig=yjbRh6uluGQ5qyJO2F4qt8SYvgo; \
-                  xq_is_login=1; xq_is_login.sig=J3LxgPVPUzbBg3Kee_PquUfih7Q; u=4381575082; \
-                  u.sig=n24M3k-s04A1Ivqs3HdaHljiKHI; aliyungf_tc=AQAAAJW4SBrybwAA0+YCapOJ5B8iuoe7; \
-                  Hm_lvt_1db88642e346389874251b5a1eded6e3=1544701289,1544851645,1545271068,1546251974; \
-                  _gid=GA1.2.178431788.1546251974; __utma=1.2022971702.1507098243.1544851651.1546251987.59; \
-                  __utmc=1; __utmt=1; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1546252088; __utmb=1.4.10.1546251987'
-                 }
+                 "Cookie": '__utmz=1.1521689062.37.2.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; _ga=GA1.2.2022971702.1507098243; device_id=7912987cc1acb87793b6a39ac3f56509; s=ep120643by; bid=9f1e4b7c1bf25a9ee495aee5366eb4dd_jo1cumta; aliyungf_tc=AQAAAGyK+jSkmQ4A0+YCaibkXpaa9LOQ; Hm_lvt_1db88642e346389874251b5a1eded6e3=1544851645,1545271068,1546251974,1547359277; _gid=GA1.2.145758004.1547359277; __utma=1.2022971702.1507098243.1546531445.1547359282.62; __utmc=1; __utmt=1; snbim_minify=true; _gat_gtag_UA_16079156_4=1; xq_a_token=243bb1cce89c8d4d365a26452e50d6e62b83db37; xq_a_token.sig=f-qBQHaLY5XWBkok8dfHMwfvPh8; xq_r_token=ad975892bb77cd4b31f5b18209607d808244bdc6; xq_r_token.sig=pvTbFtrQT8yyrLiTwRhbZ1iQYxg; u=461547359804327; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1547359808; __utmb=1.3.10.1547359282'
+                }
 
 def getNetValueFactor(net_value, net_value_5d):
     print "Begin to 计算净值因子..."
@@ -39,49 +29,55 @@ def getNetValueFactor(net_value, net_value_5d):
 
 def getIndexFactor():
     print "Begin to get 指数 Data..."
-    index_factor = 0
     print "    Begin to get 上证50 Data..."
     #上证50(SH:000016)
     stock = 'SH000016'
     index_A50 = getIndexData(stock)
-    index_factor += calMa(index_A50)
     print "    Begin to get 沪深300 Data..."
     #沪深300, SH000300
     stock = 'SH000300'
     index_300 = getIndexData(stock)
-    index_factor += calMa(index_300)
     print "    Begin to get 中证500 Data..."
     #中证500(SH:000905)
     stock = 'SH000905'
     index_500 = getIndexData(stock)
-    index_factor += calMa(index_300)
     print "    Begin to get 创业板 Data..."
     #创业板(SZ:159915)
     stock = 'SZ159915'
     index_cyb = getIndexData(stock)
-    index_factor += calMa(index_cyb)
     print "    Begin to get 上证指数 Data..."
     #上证指数(SH:000001)
     stock = 'SH000001'
     index_001 = getIndexData(stock)
-    index_factor += calMa(index_001)
+
+    index_factor = calMa(index_A50, index_300, index_500, index_cyb, index_001)
     print "    Success 计算指数因子，FACTOR[%s]" % index_factor
     return index_factor
 
-def calMa(index_data):
+def calMa(index_50, index_300, index_500, index_cyb, index_001):
     index_factor = 0
-    # 5日线
-    diff = index_data[1][1] - index_data[0][1]
-    if diff > 0:
-        index_factor += 0.5
-    # 20日线
-    diff = index_data[1][3] - index_data[0][3]
-    if diff > 0:
+    diff_5d_50 = index_50[1][1] - index_50[0][1]
+    diff_20d_50 = index_50[1][3] - index_50[0][3]
+
+    diff_5d_300 = index_300[1][1] - index_300[0][1]
+    diff_20d_300 = index_300[1][3] - index_300[0][3]
+
+    diff_5d_500 = index_500[1][1] - index_500[0][1]
+    diff_20d_500 = index_500[1][3] - index_500[0][3]
+
+    diff_5d_cyb = index_cyb[1][1] - index_cyb[0][1]
+    diff_20d_cyb = index_cyb[1][3] - index_cyb[0][3]
+
+    diff_5d_001 = index_001[1][1] - index_001[0][1]
+    diff_20d_001 = index_001[1][3] - index_001[0][3]
+
+    if diff_5d_50 > 0 and diff_5d_300 > 0 and diff_5d_500 > 0 and diff_5d_cyb > 0 and diff_5d_001 > 0:
         index_factor += 1
-    # 30日线
-    diff = index_data[1][4] - index_data[0][4]
-    if diff > 0:
+    if diff_20d_50 > 0 and diff_20d_300 > 0 and diff_20d_500 > 0 and diff_20d_cyb > 0 and diff_20d_001 > 0:
         index_factor += 2
+    print "    5日线 : 50[%s], 300[%s], 500[%s], cyb[%s], 001[%s]" % (diff_5d_50, diff_5d_300, diff_5d_500, diff_5d_cyb, diff_5d_001)
+    print "    20日线: 50[%s], 300[%s], 500[%s], cyb[%s], 001[%s]" % (diff_20d_50, diff_20d_300, diff_20d_500, diff_20d_cyb, diff_20d_001)
+
     return index_factor
 
 def getIndexData(stock):
