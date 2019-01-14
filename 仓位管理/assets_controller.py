@@ -11,7 +11,7 @@ xueqiuHeader = {"Accept": 'application/json, text/javascript, */*; q=0.01',
                  "User-Agent": 'Mozilla / 5.0(Macintosh;Intel Mac OS X 10_14_1) AppleWebKit / 537.36(KHTML, like Gecko) \
                  Chrome / 71.0.3578.98 Safari/537.36',
                  "X-Requested-With": 'XMLHttpRequest',
-                 "Cookie": '__utmz=1.1521689062.37.2.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; _ga=GA1.2.2022971702.1507098243; device_id=7912987cc1acb87793b6a39ac3f56509; s=ep120643by; bid=9f1e4b7c1bf25a9ee495aee5366eb4dd_jo1cumta; aliyungf_tc=AQAAAGyK+jSkmQ4A0+YCaibkXpaa9LOQ; Hm_lvt_1db88642e346389874251b5a1eded6e3=1544851645,1545271068,1546251974,1547359277; _gid=GA1.2.145758004.1547359277; __utma=1.2022971702.1507098243.1546531445.1547359282.62; __utmc=1; __utmt=1; snbim_minify=true; _gat_gtag_UA_16079156_4=1; xq_a_token=243bb1cce89c8d4d365a26452e50d6e62b83db37; xq_a_token.sig=f-qBQHaLY5XWBkok8dfHMwfvPh8; xq_r_token=ad975892bb77cd4b31f5b18209607d808244bdc6; xq_r_token.sig=pvTbFtrQT8yyrLiTwRhbZ1iQYxg; u=461547359804327; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1547359808; __utmb=1.3.10.1547359282'
+                 "Cookie": '__utmz=1.1521689062.37.2.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; _ga=GA1.2.2022971702.1507098243; device_id=7912987cc1acb87793b6a39ac3f56509; s=ep120643by; bid=9f1e4b7c1bf25a9ee495aee5366eb4dd_jo1cumta; aliyungf_tc=AQAAAGyK+jSkmQ4A0+YCaibkXpaa9LOQ; Hm_lvt_1db88642e346389874251b5a1eded6e3=1544851645,1545271068,1546251974,1547359277; __utma=1.2022971702.1507098243.1546531445.1547359282.62; __utmc=1; snbim_minify=true; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1547359808; xq_a_token=051e84adaee4598582cffc2f124f97fdb18a9911; xq_a_token.sig=5cOsGFWz4zSRiOjJHDohIFZfQ1c; xq_r_token=2f5c4cd5c283356bc402e169098faa2b786a517b; xq_r_token.sig=MAASZITVtxUXMIQ3gYDIBiKGuEM'
                 }
 
 def getNetValueFactor(net_value, net_value_5d):
@@ -141,7 +141,7 @@ def getPercentFactor():
 def getVolumeFactor():
     print "Begin to get 交易量 Data..."
     now = int(time.time())
-    url = "https://xueqiu.com/stock/quote_order.json?page=1&size=100&order=desc&exchange=CN&stockType=sha&column=symbol%2Cname%2Ccurrent%2Cchg%2Cpercent%2Clast_close%2Copen%2Chigh%2Clow%2Cvolume%2Camount%2Cmarket_capital%2Cpe_ttm%2Chigh52w%2Clow52w%2Chasexist&orderBy=volume&_=" + str(now)
+    url = "https://xueqiu.com/stock/quote_order.json?page=1&size=100&order=desc&exchange=CN&stockType=sha&column=symbol%2Cname%2Ccurrent%2Cchg%2Cpercent%2Clast_close%2Copen%2Chigh%2Clow%2Cvolume%2Camount%2Cmarket_capital%2Cpe_ttm%2Chigh52w%2Clow52w%2Chasexist&orderBy=amount&_=" + str(now)
     contents = urllib2.urlopen(urllib2.Request(
         url,
         headers = xueqiuHeader
@@ -150,7 +150,7 @@ def getVolumeFactor():
     sha_stocks = contents['data']
     print "    Success for getting 沪市交易量..."
 
-    url = "https://xueqiu.com/stock/quote_order.json?page=1&size=100&order=desc&exchange=CN&stockType=sza&column=symbol%2Cname%2Ccurrent%2Cchg%2Cpercent%2Clast_close%2Copen%2Chigh%2Clow%2Cvolume%2Camount%2Cmarket_capital%2Cpe_ttm%2Chigh52w%2Clow52w%2Chasexist&orderBy=volume&_=" + str(now)
+    url = "https://xueqiu.com/stock/quote_order.json?page=1&size=100&order=desc&exchange=CN&stockType=sza&column=symbol%2Cname%2Ccurrent%2Cchg%2Cpercent%2Clast_close%2Copen%2Chigh%2Clow%2Cvolume%2Camount%2Cmarket_capital%2Cpe_ttm%2Chigh52w%2Clow52w%2Chasexist&orderBy=amount&_=" + str(now)
     contents = urllib2.urlopen(urllib2.Request(
         url,
         headers = xueqiuHeader
@@ -158,19 +158,8 @@ def getVolumeFactor():
     contents = json.loads(contents)
     sza_stocks = contents['data']
     print "    Success for getting 深市交易量..."
-
-    url = "https://xueqiu.com/stock/quote_order.json?page=1&size=100&order=desc&exchange=CN&stockType=cyb&column=symbol%2Cname%2Ccurrent%2Cchg%2Cpercent%2Clast_close%2Copen%2Chigh%2Clow%2Cvolume%2Camount%2Cmarket_capital%2Cpe_ttm%2Chigh52w%2Clow52w%2Chasexist&orderBy=volume&_=" + str(
-        now)
-    contents = urllib2.urlopen(urllib2.Request(
-        url,
-        headers=xueqiuHeader
-    )).read()
-    contents = json.loads(contents)
-    cyb_stocks = contents['data']
-    print "    Success for getting 创业板交易量..."
     #print "    Begin to analyse Volume Data..."
-    tmp_list = merge_data(sha_stocks, sza_stocks)
-    final_list = merge_data(tmp_list, cyb_stocks)
+    final_list = merge_data(sha_stocks, sza_stocks)
     volume_factor = 0
     red_num = 0
     green_num = 0
@@ -182,6 +171,7 @@ def getVolumeFactor():
             green_num += 1
         if i is 9 or i is 49 or i is 99 or i is 199:
             if red_num > green_num:
+                print "red[%s], green[%s]" %(red_num, green_num)
                 volume_factor += 0.25
     print "    Success 计算交易量因子, FACTOR[%s]..." % volume_factor
     return volume_factor
@@ -195,21 +185,25 @@ def merge_data(a_list, b_list):
     a_v = a_list[i]
     b_v = b_list[j]
     while i < len_a and j < len_b:
-        while( i < len_a and j < len_b and a_v[9] >= b_v[9]) :
-            tmp_list.append(a_v)
+        while( i < len_a and j < len_b and a_v[10] >= b_v[10]) :
+            if a_v not in tmp_list:
+                tmp_list.append(a_v)
             i += 1
             if i < len_a:
                 a_v = a_list[i]
-        while (i < len_a and j < len_b and a_v[9] < b_v[9]):
-            tmp_list.append(b_v)
+        while (i < len_a and j < len_b and a_v[10] < b_v[10]):
+            if b_v not in tmp_list:
+                tmp_list.append(b_v)
             j += 1
             if j < len_b:
                 b_v = b_list[j]
     while i < len_a:
-        tmp_list.append(a_list[i])
+        if a_list[i] not in tmp_list:
+            tmp_list.append(a_list[i])
         i += 1
     while j < len_b:
-        tmp_list.append(b_list[j])
+        if b_list[j] not in tmp_list:
+            tmp_list.append(b_list[j])
         j += 1
     return tmp_list
 
